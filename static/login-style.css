@@ -1,0 +1,77 @@
+html, body
+{
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-box
+{
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+    padding: 15px;
+    justify-content: left;
+    border-color: 2px solid #333;
+    background-color: #333;
+    color: aliceblue;
+    width: 100%;
+    height: auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
+}
+
+
+.login-box form
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+.login-box p
+{
+    margin: 0px;
+    padding: 0px;
+    color: maroon;
+    display: none;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"]
+{
+    height: 25px;
+}
+
+.login-box button
+{
+    height: 30px;
+    width: auto;
+    font-size: large;
+    background-color: aliceblue;
+}
+
+.signup-box
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 200px;
+}
+.signup-box p
+{
+    margin: 0;
+    padding: 0;
+}
+
+#registeration
+{
+    color: white;
+    text-decoration: none;
+}

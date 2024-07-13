@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Clockmaster</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>Company name</h1>
+            <div id="head2">
+                <a>Our Story</a>
+                <a id="OpenModalButton">Add Watches</a>
+                <a href="{{url_for('login')}}" id="head2-login">Log In</a>
+            </h1>
+        </header>
+        <main class="product-grid">
+            {% for watch in watches %}
+            <div class="product-box">
+                <img src="{{ watch.watch_image }}" alt="{{ watch.watch_name }}">
+                <h2>{{ watch.watch_name }}</h2>
+                <p>Price: ${{ watch.watch_price }}</p>
+                <p>Quantity Left: {{ watch.watch_quantity }}</p>
+                <p>{{ watch.watch_detail }}</p>    
+            </div>
+            {% endfor %}
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2024 My Website</p>
+    </footer>
+
+    <div id="WatchModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-first">
+                <span class="close">&times;</span>
+                <h2>Watch Information</h2>
+            </div>
+            <div class="modal-second">
+                <label for="actionSelector">Choose Action</label>
+                <select id="actionSelector">
+                <option value="add">Add Information</option>
+                <option value="edit">Edit Information</option>
+                </select>
+            </div>    
+            
+            <form id="addForm" action="/add_watch" method="post" enctype="multipart/form-data">
+                <div class="modal-form">
+                    <label for="Add_Watch_Name">Watch Name:</label>
+                    <input type="text" id="Add_Watch_Name" name="Add_Watch_Name">
+                </div>
+                <div class="modal-form">
+                    <label for="Add_Watch_Quantity">Watch Quantity:</label>
+                    <input type="number" id="Add_Watch_Quantity" name="Add_Watch_Quantity" step="any" min="0">
+                </div>
+                <div class="modal-form">
+                    <label for="Add_Watch_Price">Watch Price (e.g 100):</label>
+                    <input type="number" id="Add_Watch_Price" name="Add_Watch_Price" step="any" min="0">
+                </div>
+                <div class="modal-form">
+                    <label for="Add_Watch_Details">Watch Details:</label>
+                    <input type="text" id="Add_Watch_Details" name="Add_Watch_Details">
+                </div>
+                <div class="modal-form">
+                    <label for="Add_Watch_Image">Watch Image:</label>
+                    <input type="file" id="Add_Watch_Image" name="Add_Watch_Image">
+                </div>
+                <button type="add_submit">Submit</button>
+            </form>
+            
+            <form id="editForm" action="/update_watch" method="post" enctype="multipart/form-data">
+                <div class="modal-form">
+                    <label for="Edit_Watch_Select">Select Watch:</label>
+                    <select id="Edit_Watch_Select" name="Edit_Watch_Select">
+                    </select>
+                </div>
+                <div class="modal-form">
+                    <label for="Edit_Watch_Name">Watch name:</label>
+                    <input type="text" id="Edit_Watch_Name" name="Edit_Watch_Name">
+                </div>
+                <div class="modal-form">
+                    <label for="Edit_Watch_Quantity">Watch Quantity:</label>
+                    <input type="number" id="Edit_Watch_Quantity" name="Edit_Watch_Quantity" min="0">
+                </div>
+                <div class="modal-form">
+                    <label for="Edit_Watch_Price">Watch Price:</label>
+                    <input type="number" id="Edit_Watch_Price" name="Edit_Watch_Price" min="0">
+                </div>
+                <div class="modal-form">
+                    <label for="Edit_Watch_Detail">Watch Details:</label>
+                    <input type="text" id="Edit_Watch_Detail" name="Edit_Watch_Detail">
+                </div>
+                <div class="modal-form">
+                    <label for="Edit_Watch_Image">Watch Image:</label>
+                    <input type="file" id="Edit_Watch_Image" name="Edit_Watch_Image">
+                </div>
+                <button id="dropdown-batch-delete">Show Products</button>
+                <div id="batch-delete-container" class="batch-delete-container">
+                    <table id="batch-delete">
+                        <thead>
+                            <tr>
+                                <th>Delete</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <div class="checkallbox">
+                            <input type="checkbox" class="checkallbox-input" id="checkallbox-input">
+                            <label for="checkallbox-input" class="checkallbox-label">Check All</label>
+                        </div>
+                        <tbody>
+                            {% for watch in watches %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="checkbox" value="{{ watch.watch_id }}">
+                                </td>
+                                <td>{{ watch.watch_name }}</td>
+                                <td>{{ watch.watch_price }}</td>
+                                <td>{{ watch.watch_quantity }}</td>
+                                <td>{{ watch.watch_detail }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <button type="edit_submit", id="edit_submit">Update Information</button>
+            </form>
+        </div>
+    </div>
+    <script src="static/script.js"></script>
+</body>
+</html>

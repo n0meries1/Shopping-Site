@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Clockmaster</title>
+    <link rel="stylesheet" href="static/login-style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="login-box">
+            <form id="login_user">
+                <label for="login-label-username">Username:</label>
+                <input type="text" id="username-input" name="username-input">
+                <label for="password-label-username">Password:</label>
+                <input type="password" id="password-input" name="password-input">
+                <p id="login-fail">Username and/or Password Invalid</p>
+                <button type="submit" id="submit-form">Login</button>
+            </form>
+            <div class="signup-box">
+                <a href="{{url_for('register')}}" id="registeration">Register Now</a>
+                <a>Forget Password</a>
+            </div>
+        </div>
+    </div>
+    <script src="static/login-script.js"></script>
+</body>
+</html>
