@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.utils import secure_filename
 import watches_dao
@@ -10,6 +10,7 @@ UPLOAD_FOLDER = 'C:\Code\Shopping Site\static\watch_images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
+app.secret_key = "random_key"
 auth = HTTPBasicAuth()
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -20,8 +21,13 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
+        
     watches = watches_dao.get_products(connection)
-    return render_template('index.html', watches=watches)
+    if session['username'] == 'root':
+        return render_template('root.html', watches=watches, username= 'This is the admin portal!')
+    if "username" in session:
+        return render_template('index.html', watches=watches, username='Welcome ' + session['username'] + ' to the World of Waches!')
+    return render_template('index.html', watches=watches, username='Please log in!')
 
 @app.route('/login')
 def login():
@@ -34,9 +40,22 @@ def login_user():
     password = hashlib.sha256(password.encode()).hexdigest()
     outcome = watches_dao.login_user(connection, username, password)
     if (outcome):
+        session['username'] = username
         return jsonify({'success': True})
     else:
         return jsonify({'success': False})
+    
+@app.route('/check_session')
+def check_session():
+    if "username" in session:
+        return jsonify({'session': True})
+    return jsonify({'session': False})
+
+@app.route('/logout')
+def logout():
+    session.pop("username", None)
+    watches = watches_dao.get_products(connection)
+    return render_template('index.html', watches=watches, username='Please log in!')
 
 @app.route('/register')
 def register():
@@ -57,11 +76,15 @@ def create_new_user():
 
 @app.route('/get_watch_name')
 def get_watch_names():
+    if session['username'] != 'root':
+        return redirect(url_for('index'))
     watches = watches_dao.get_products(connection)
     return jsonify(watches)    
 
 @app.route('/add_watch', methods=['POST'])
 def add_watch():
+    if session['username'] != 'root':
+        return redirect(url_for('index'))
     watch_name = request.form['Add_Watch_Name']
     watch_price = request.form['Add_Watch_Price']
     watch_details = request.form['Add_Watch_Details']
@@ -82,6 +105,8 @@ def add_watch():
 
 @app.route('/get_watch/<int:watch_id>', methods=['GET'])
 def get_watch_by_id(watch_id):
+    if session['username'] != 'root':
+        return redirect(url_for('index'))
     watch = watches_dao.get_product_by_id(connection, watch_id)
     watch_data = {
         'watch_id': watch[0],
@@ -95,6 +120,8 @@ def get_watch_by_id(watch_id):
 
 @app.route('/update_watch', methods=['POST'])
 def update_watch():
+    if session['username'] != 'root':
+        return redirect(url_for('index'))
     watch_id = request.form['Edit_Watch_Select']
     watch_name = request.form['Edit_Watch_Name']
     watch_price = request.form['Edit_Watch_Price']
@@ -119,6 +146,8 @@ def update_watch():
 
 @app.route('/delete_watches', methods=['POST'])
 def delete_watches():
+    if session['username'] != 'root':
+        return redirect(url_for('index'))
     data = request.get_json()
     watch_ids = data.get('watch_ids', [])
 

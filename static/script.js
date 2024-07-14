@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleCheckboxes = document.querySelectorAll('.checkbox');
     const checkallbox = document.querySelector('.checkallbox-input');
 
+
     OpenModalButton.addEventListener('click', () => {
         WatchModal.style.display = 'block';
         addForm.style.display = 'block';
         editForm.style.display = 'none';
-        console.log("printed");
     });
 
     CloseSpan.addEventListener('click', () => {
@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
             WatchModal.style.display = 'none'
         }
     });
+
+
 
 
     actionSelector.addEventListener('change', (event) => {
@@ -144,7 +146,22 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.checked = checkallbox.checked;
         });
     });
+    
 });
 
+async function checkLoginStatus() {
+    const response = await fetch('/check_session');
+    const data = await response.json();
+    const logoutButton = document.getElementById('logout');
+    const loginButton = document.getElementById('login');
 
+    if (data.session) {
+        logoutButton.style.display = 'block';
+        loginButton.style.display = 'none';
+    } else {
+        logoutButton.style.display = 'none';
+        loginButton.style.display = 'block';
+    }
+}
 
+window.onload = checkLoginStatus();
